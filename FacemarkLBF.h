@@ -3,18 +3,18 @@
 
 #include "FacemarkLBFGlobal.h"
 #include <opencv2/face.hpp>
-#include "Core/CImageProcess2d.h"
-#include "IO/CImageProcessIO.h"
+#include "Core/C2dImageTask.h"
+#include "IO/CImageIO.h"
 #include "CPluginProcessInterface.hpp"
 
 //------------------------------//
 //----- CFacemarkLBFParam -----//
 //------------------------------//
-class FACEMARKLBFSHARED_EXPORT CFacemarkLBFParam: public CProtocolTaskParam
+class FACEMARKLBFSHARED_EXPORT CFacemarkLBFParam: public CWorkflowTaskParam
 {
     public:
 
-        CFacemarkLBFParam() : CProtocolTaskParam()
+        CFacemarkLBFParam() : CWorkflowTaskParam()
         {
         }
 
@@ -38,7 +38,7 @@ class FACEMARKLBFSHARED_EXPORT CFacemarkLBFParam: public CProtocolTaskParam
 //-------------------------//
 //----- CFacemarkLBF -----//
 //-------------------------//
-class FACEMARKLBFSHARED_EXPORT CFacemarkLBF : public CImageProcess2d
+class FACEMARKLBFSHARED_EXPORT CFacemarkLBF : public C2dImageTask
 {
     public:
 
@@ -52,10 +52,10 @@ class FACEMARKLBFSHARED_EXPORT CFacemarkLBF : public CImageProcess2d
     private:
 
         // drawPolyLine draws a poly line by joining successive points between the start and end indices.
-        void    drawPolyline(std::shared_ptr<CGraphicsProcessOutput>& pOutput, std::vector<cv::Point2f> &landmarks, size_t start, size_t end, bool bIsClosed = false);
-        void    drawLandmarksPoint(std::shared_ptr<CGraphicsProcessOutput>& pOutput, std::vector<cv::Point2f> &landmarks);
-        void    drawLandmarksFace(std::shared_ptr<CGraphicsProcessOutput>& pOutput, std::vector<cv::Point2f> &landmarks);
-        void    drawDelaunay(std::shared_ptr<CGraphicsProcessOutput>& pOutput, std::vector<cv::Point2f> &landmarks);
+        void    drawPolyline(std::shared_ptr<CGraphicsOutput>& pOutput, std::vector<cv::Point2f> &landmarks, size_t start, size_t end, bool bIsClosed = false);
+        void    drawLandmarksPoint(std::shared_ptr<CGraphicsOutput>& pOutput, std::vector<cv::Point2f> &landmarks);
+        void    drawLandmarksFace(std::shared_ptr<CGraphicsOutput>& pOutput, std::vector<cv::Point2f> &landmarks);
+        void    drawDelaunay(std::shared_ptr<CGraphicsOutput>& pOutput, std::vector<cv::Point2f> &landmarks);
 
         void    manageInputGraphics(const CMat& imgSrc);
         void    manageOutput(std::vector<std::vector<cv::Point2f>>& landmarks);
@@ -69,7 +69,7 @@ class FACEMARKLBFSHARED_EXPORT CFacemarkLBF : public CImageProcess2d
 //--------------------------------//
 //----- CFacemarkLBFFactory -----//
 //--------------------------------//
-class FACEMARKLBFSHARED_EXPORT CFacemarkLBFFactory : public CProcessFactory
+class FACEMARKLBFSHARED_EXPORT CFacemarkLBFFactory : public CTaskFactory
 {
     public:
 
@@ -93,7 +93,7 @@ class FACEMARKLBFSHARED_EXPORT CFacemarkLBFFactory : public CProcessFactory
             m_info.m_version = "1.0.0";
         }
 
-        virtual ProtocolTaskPtr create(const ProtocolTaskParamPtr& pParam) override
+        virtual WorkflowTaskPtr create(const WorkflowTaskParamPtr& pParam) override
         {
             auto pFacemarkLBFParam = std::dynamic_pointer_cast<CFacemarkLBFParam>(pParam);
             if(pFacemarkLBFParam != nullptr)
@@ -101,7 +101,7 @@ class FACEMARKLBFSHARED_EXPORT CFacemarkLBFFactory : public CProcessFactory
             else
                 return create();
         }
-        virtual ProtocolTaskPtr create() override
+        virtual WorkflowTaskPtr create() override
         {
             auto pFacemarkLBFParam = std::make_shared<CFacemarkLBFParam>();
             assert(pFacemarkLBFParam != nullptr);
@@ -112,15 +112,15 @@ class FACEMARKLBFSHARED_EXPORT CFacemarkLBFFactory : public CProcessFactory
 //-------------------------------//
 //----- CFacemarkLBFWidget -----//
 //-------------------------------//
-class FACEMARKLBFSHARED_EXPORT CFacemarkLBFWidget: public CProtocolTaskWidget
+class FACEMARKLBFSHARED_EXPORT CFacemarkLBFWidget: public CWorkflowTaskWidget
 {
     public:
 
-        CFacemarkLBFWidget(QWidget *parent = Q_NULLPTR): CProtocolTaskWidget(parent)
+        CFacemarkLBFWidget(QWidget *parent = Q_NULLPTR): CWorkflowTaskWidget(parent)
         {
             init();
         }
-        CFacemarkLBFWidget(ProtocolTaskParamPtr pParam, QWidget *parent = Q_NULLPTR): CProtocolTaskWidget(parent)
+        CFacemarkLBFWidget(WorkflowTaskParamPtr pParam, QWidget *parent = Q_NULLPTR): CWorkflowTaskWidget(parent)
         {
             m_pParam = std::dynamic_pointer_cast<CFacemarkLBFParam>(pParam);
             init();
@@ -163,7 +163,7 @@ class FACEMARKLBFSHARED_EXPORT CFacemarkLBFWidgetFactory : public CWidgetFactory
             m_name = QObject::tr("Facemark LBF").toStdString();
         }
 
-        virtual ProtocolTaskWidgetPtr   create(ProtocolTaskParamPtr pParam)
+        virtual WorkflowTaskWidgetPtr   create(WorkflowTaskParamPtr pParam)
         {
             return std::make_shared<CFacemarkLBFWidget>(pParam);
         }
@@ -180,7 +180,7 @@ class FACEMARKLBFSHARED_EXPORT CFacemarkLBFInterface : public QObject, public CP
 
     public:
 
-        virtual std::shared_ptr<CProcessFactory> getProcessFactory()
+        virtual std::shared_ptr<CTaskFactory> getProcessFactory()
         {
             return std::make_shared<CFacemarkLBFFactory>();
         }

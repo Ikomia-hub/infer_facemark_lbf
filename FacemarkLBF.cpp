@@ -1,16 +1,16 @@
 #include "FacemarkLBF.h"
 #include "Graphics/CGraphicsLayer.h"
 
-CFacemarkLBF::CFacemarkLBF() : CImageProcess2d()
+CFacemarkLBF::CFacemarkLBF() : C2dImageTask()
 {
-    addOutput(std::make_shared<CFeatureProcessIO<cv::Point2f>>());
-    addOutput(std::make_shared<CGraphicsProcessOutput>());
+    addOutput(std::make_shared<CFeatureIO<cv::Point2f>>());
+    addOutput(std::make_shared<CGraphicsOutput>());
 }
 
-CFacemarkLBF::CFacemarkLBF(const std::string name, const std::shared_ptr<CFacemarkLBFParam> &pParam) : CImageProcess2d(name)
+CFacemarkLBF::CFacemarkLBF(const std::string name, const std::shared_ptr<CFacemarkLBFParam> &pParam) : C2dImageTask(name)
 {
-    addOutput(std::make_shared<CFeatureProcessIO<cv::Point2f>>());
-    addOutput(std::make_shared<CGraphicsProcessOutput>());
+    addOutput(std::make_shared<CFeatureIO<cv::Point2f>>());
+    addOutput(std::make_shared<CGraphicsOutput>());
     m_pParam = std::make_shared<CFacemarkLBFParam>(*pParam);
 }
 
@@ -22,7 +22,7 @@ size_t CFacemarkLBF::getProgressSteps()
 void CFacemarkLBF::run()
 {
     beginTaskRun();
-    auto pInput = std::dynamic_pointer_cast<CImageProcessIO>(getInput(0));
+    auto pInput = std::dynamic_pointer_cast<CImageIO>(getInput(0));
     auto pParam = std::dynamic_pointer_cast<CFacemarkLBFParam>(m_pParam);
 
     if(pInput == nullptr || pParam == nullptr)
@@ -69,7 +69,7 @@ void CFacemarkLBF::run()
     emit m_signalHandler->doProgress();
 }
 
-void CFacemarkLBF::drawPolyline(std::shared_ptr<CGraphicsProcessOutput> &pOutput, std::vector<cv::Point2f> &landmarks, size_t start, size_t end, bool bIsClosed)
+void CFacemarkLBF::drawPolyline(std::shared_ptr<CGraphicsOutput> &pOutput, std::vector<cv::Point2f> &landmarks, size_t start, size_t end, bool bIsClosed)
 {
     if(bIsClosed)
     {
@@ -93,7 +93,7 @@ void CFacemarkLBF::drawPolyline(std::shared_ptr<CGraphicsProcessOutput> &pOutput
     }
 }
 
-void CFacemarkLBF::drawLandmarksPoint(std::shared_ptr<CGraphicsProcessOutput> &pOutput, std::vector<cv::Point2f> &landmarks)
+void CFacemarkLBF::drawLandmarksPoint(std::shared_ptr<CGraphicsOutput> &pOutput, std::vector<cv::Point2f> &landmarks)
 {
     for(size_t i = 0; i < landmarks.size(); i++)
     {
@@ -102,7 +102,7 @@ void CFacemarkLBF::drawLandmarksPoint(std::shared_ptr<CGraphicsProcessOutput> &p
     }
 }
 
-void CFacemarkLBF::drawLandmarksFace(std::shared_ptr<CGraphicsProcessOutput> &pOutput, std::vector<cv::Point2f> &landmarks)
+void CFacemarkLBF::drawLandmarksFace(std::shared_ptr<CGraphicsOutput> &pOutput, std::vector<cv::Point2f> &landmarks)
 {
     // Draw face for the 68-point model.
     if (landmarks.size() == 68)
@@ -126,9 +126,9 @@ void CFacemarkLBF::drawLandmarksFace(std::shared_ptr<CGraphicsProcessOutput> &pO
     }
 }
 
-void CFacemarkLBF::drawDelaunay(std::shared_ptr<CGraphicsProcessOutput> &pOutput, std::vector<cv::Point2f> &landmarks)
+void CFacemarkLBF::drawDelaunay(std::shared_ptr<CGraphicsOutput> &pOutput, std::vector<cv::Point2f> &landmarks)
 {
-    auto pInput = std::dynamic_pointer_cast<CImageProcessIO>(getInput(0));
+    auto pInput = std::dynamic_pointer_cast<CImageIO>(getInput(0));
     cv::Rect rect(0, 0, (int)pInput->getImage().getNbCols(), (int)pInput->getImage().getNbRows());
 
     // Create an instance of Subdiv2D
@@ -166,7 +166,7 @@ void CFacemarkLBF::manageInputGraphics(const CMat &imgSrc)
     // Clear previous faces
     m_faces.clear();
 
-    auto pGraphicsInput = std::dynamic_pointer_cast<CGraphicsProcessInput>(getInput(1));
+    auto pGraphicsInput = std::dynamic_pointer_cast<CGraphicsInput>(getInput(1));
     if(pGraphicsInput == nullptr)
         return;
 
@@ -196,7 +196,7 @@ void CFacemarkLBF::manageInputGraphics(const CMat &imgSrc)
 void CFacemarkLBF::manageOutput(std::vector<std::vector<cv::Point2f> > &landmarks)
 {
     auto pParam = std::dynamic_pointer_cast<CFacemarkLBFParam>(m_pParam);
-    auto pGraphicOutput = std::dynamic_pointer_cast<CGraphicsProcessOutput>(getOutput(getOutputCount() - 1));
+    auto pGraphicOutput = std::dynamic_pointer_cast<CGraphicsOutput>(getOutput(getOutputCount() - 1));
     if(pGraphicOutput == nullptr)
         throw CException(CoreExCode::NULL_POINTER, "Invalid graphics output", __func__, __FILE__, __LINE__);
 
@@ -221,7 +221,7 @@ void CFacemarkLBF::manageOutput(std::vector<std::vector<cv::Point2f> > &landmark
             drawDelaunay(pGraphicOutput, landmarks[i]);
     }
 
-    auto pNumericOutput = std::dynamic_pointer_cast<CFeatureProcessIO<cv::Point2f>>(getOutput(1));
+    auto pNumericOutput = std::dynamic_pointer_cast<CFeatureIO<cv::Point2f>>(getOutput(1));
     if(pNumericOutput)
     {
         pNumericOutput->clearData();
