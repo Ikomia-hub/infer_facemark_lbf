@@ -128,27 +128,28 @@ class FACEMARKLBFSHARED_EXPORT CFacemarkLBFWidget: public CWorkflowTaskWidget
 
     private:
 
-        void init() override
+        void init()
         {
             if(m_pParam == nullptr)
                 m_pParam = std::make_shared<CFacemarkLBFParam>();
 
-            auto pCombo = addCombo(0, tr("Display type"));
-            pCombo->addItem("Points", 0);
-            pCombo->addItem("Face", 1);
-            pCombo->addItem("Delaunay", 2);
-            pCombo->setCurrentIndex(pCombo->findData(m_pParam->m_displayType));
+            m_pCombo = addCombo(0, tr("Display type"));
+            m_pCombo->addItem("Points", 0);
+            m_pCombo->addItem("Face", 1);
+            m_pCombo->addItem("Delaunay", 2);
+            m_pCombo->setCurrentIndex(m_pCombo->findData(m_pParam->m_displayType));
+        }
 
-            connect(m_pApplyBtn, &QPushButton::clicked, [=]
-            {
-                m_pParam->m_displayType = pCombo->currentData().toInt();
-                emit doApplyProcess(m_pParam);
-            });
+        void onApply() override
+        {
+            m_pParam->m_displayType = m_pCombo->currentData().toInt();
+            emit doApplyProcess(m_pParam);
         }
 
     private:
 
         std::shared_ptr<CFacemarkLBFParam>  m_pParam = nullptr;
+        QComboBox*  m_pCombo;
 };
 
 //--------------------------------------//
