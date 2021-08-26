@@ -3,13 +3,13 @@
 
 CFacemarkLBF::CFacemarkLBF() : C2dImageTask()
 {
-    addOutput(std::make_shared<CFeatureIO<cv::Point2f>>());
+    addOutput(std::make_shared<CNumericIO<cv::Point2f>>());
     addOutput(std::make_shared<CGraphicsOutput>());
 }
 
 CFacemarkLBF::CFacemarkLBF(const std::string name, const std::shared_ptr<CFacemarkLBFParam> &pParam) : C2dImageTask(name)
 {
-    addOutput(std::make_shared<CFeatureIO<cv::Point2f>>());
+    addOutput(std::make_shared<CNumericIO<cv::Point2f>>());
     addOutput(std::make_shared<CGraphicsOutput>());
     m_pParam = std::make_shared<CFacemarkLBFParam>(*pParam);
 }
@@ -221,7 +221,7 @@ void CFacemarkLBF::manageOutput(std::vector<std::vector<cv::Point2f> > &landmark
             drawDelaunay(pGraphicOutput, landmarks[i]);
     }
 
-    auto pNumericOutput = std::dynamic_pointer_cast<CFeatureIO<cv::Point2f>>(getOutput(1));
+    auto pNumericOutput = std::dynamic_pointer_cast<CNumericIO<cv::Point2f>>(getOutput(1));
     if(pNumericOutput)
     {
         pNumericOutput->clearData();
