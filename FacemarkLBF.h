@@ -75,7 +75,7 @@ class FACEMARKLBFSHARED_EXPORT CFacemarkLBFFactory : public CTaskFactory
 
         CFacemarkLBFFactory()
         {
-            m_info.m_name = QObject::tr("Facemark LBF").toStdString();
+            m_info.m_name = "infer_facemark_lbf";
             m_info.m_shortDescription = QObject::tr("Facial landmark detection using Local Binary Features (LBF)").toStdString();
             m_info.m_description = QObject::tr("The locations of the fiducial facial landmark points around facial components and "
                                                "facial contour capture the rigid and non-rigid facial deformations due to head movements and facial expressions. "
@@ -161,7 +161,7 @@ class FACEMARKLBFSHARED_EXPORT CFacemarkLBFWidgetFactory : public CWidgetFactory
 
         CFacemarkLBFWidgetFactory()
         {
-            m_name = QObject::tr("Facemark LBF").toStdString();
+            m_name = "infer_facemark_lbf";
         }
 
         virtual WorkflowTaskWidgetPtr   create(WorkflowTaskParamPtr pParam)

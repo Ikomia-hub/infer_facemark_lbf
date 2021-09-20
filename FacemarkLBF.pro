@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 QT += core gui widgets sql
-TARGET = FacemarkLBF
+TARGET = infer_facemark_lbf
 
 win32: DESTDIR = $$(USERPROFILE)/Ikomia/Plugins/C++/$$TARGET
 unix: DESTDIR = $$(HOME)/Ikomia/Plugins/C++/$$TARGET
