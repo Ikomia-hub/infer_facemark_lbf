@@ -179,10 +179,10 @@ void CFacemarkLBF::manageInputGraphics(const CMat &imgSrc)
             continue;
 
         auto rect = it->getBoundingRect();
-        int x = rect.x();
-        int y = rect.y();
-        int w = rect.width();
-        int h = rect.height();
+        int x = (int)rect[0];
+        int y = (int)rect[1];
+        int w = (int)rect[2];
+        int h = (int)rect[3];
 
         // Check if whole bb is inside image domain
         if(x >= 0 && y >= 0 && x+w < imgSrc.cols && y+h < imgSrc.rows)
