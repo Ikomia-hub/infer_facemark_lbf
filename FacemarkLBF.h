@@ -80,7 +80,7 @@ class FACEMARKLBFSHARED_EXPORT CFacemarkLBFFactory : public CTaskFactory
             m_info.m_description = QObject::tr("The locations of the fiducial facial landmark points around facial components and "
                                                "facial contour capture the rigid and non-rigid facial deformations due to head movements and facial expressions. "
                                                "They are hence important for various facial analysis tasks. ").toStdString();
-            m_info.m_path = QObject::tr("Plugins/C++/Face/Landmarks").toStdString();
+            m_info.m_path = QObject::tr("Plugins/C++/Face").toStdString();
             m_info.m_iconPath = "Icon/icon.png";
             m_info.m_keywords = "face,facial,landmark";
             m_info.m_authors = "Ren S, Cao X, Wei Y, Sun J.";
