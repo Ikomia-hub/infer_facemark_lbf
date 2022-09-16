@@ -6,6 +6,7 @@
 #include "Core/C2dImageTask.h"
 #include "IO/CImageIO.h"
 #include "CPluginProcessInterface.hpp"
+#include "Main/CoreTools.hpp"
 
 //------------------------------//
 //----- CFacemarkLBFParam -----//
@@ -82,7 +83,6 @@ class FACEMARKLBFSHARED_EXPORT CFacemarkLBFFactory : public CTaskFactory
                                                "They are hence important for various facial analysis tasks. ").toStdString();
             m_info.m_path = QObject::tr("Plugins/C++/Face").toStdString();
             m_info.m_iconPath = "Icon/icon.png";
-            m_info.m_keywords = "face,facial,landmark";
             m_info.m_authors = "Ren S, Cao X, Wei Y, Sun J.";
             m_info.m_article = "Face alignment at 3000 fps via regressing local binary features";
             m_info.m_journal = "CVPR";
@@ -90,7 +90,8 @@ class FACEMARKLBFSHARED_EXPORT CFacemarkLBFFactory : public CTaskFactory
             m_info.m_docLink = "https://docs.opencv.org/3.4.3/dc/d63/classcv_1_1face_1_1FacemarkLBF.html";
             m_info.m_license = "3-clause BSD License";
             m_info.m_repo = "https://github.com/opencv/opencv";
-            m_info.m_version = "1.0.0";
+            m_info.m_version = "1.1.0";
+            m_info.m_keywords = "face,facial,landmark," + Utils::Plugin::getArchitectureKeywords();
         }
 
         virtual WorkflowTaskPtr create(const WorkflowTaskParamPtr& pParam) override
