@@ -46,6 +46,13 @@ void CFacemarkLBF::run()
             // Create an instance of Facemark
             m_pFacemark = cv::face::FacemarkLBF::create();
             std::string modelFile = Utils::Plugin::getCppPath() + "/" + Utils::File::conformName(QString::fromStdString(m_name)).toStdString() + "/Model/lbfmodel.yaml";
+
+            if (!Utils::File::isFileExist(modelFile))
+            {
+                std::cout << "Downloading model..." << std::endl;
+                std::string downloadUrl = Utils::Plugin::getModelHubUrl() + "/" + m_name + "/lbfmodel.yaml";
+                download(downloadUrl, modelFile);
+            }
             m_pFacemark->loadModel(modelFile);
         }
         // Variable for landmarks.

@@ -90,7 +90,7 @@ class FACEMARKLBFSHARED_EXPORT CFacemarkLBFFactory : public CTaskFactory
             m_info.m_docLink = "https://docs.opencv.org/3.4.3/dc/d63/classcv_1_1face_1_1FacemarkLBF.html";
             m_info.m_license = "3-clause BSD License";
             m_info.m_repo = "https://github.com/opencv/opencv";
-            m_info.m_version = "1.1.0";
+            m_info.m_version = "1.2.0";
             m_info.m_keywords = "face,facial,landmark," + Utils::Plugin::getArchitectureKeywords();
         }
 
