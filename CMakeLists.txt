@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-set(PLUGIN_VERSION 1.3.0)
+set(PLUGIN_VERSION 1.2.0)
 project(infer_facemark_lbf VERSION ${PLUGIN_VERSION} LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
