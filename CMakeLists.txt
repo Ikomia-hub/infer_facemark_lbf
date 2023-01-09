@@ -58,9 +58,7 @@ set_target_properties(infer_facemark_lbf PROPERTIES
 
 target_compile_definitions(infer_facemark_lbf PRIVATE
     BOOST_ALL_NO_LIB
-    CUDA11
     FACEMARKLBF_LIBRARY
-    PY310
     QT_DEPRECATED_WARNINGS
 )
 
