@@ -3,9 +3,9 @@
 
 #include "FacemarkLBFGlobal.h"
 #include <opencv2/face.hpp>
-#include "Core/C2dImageTask.h"
+#include "Task/C2dImageTask.h"
 #include "IO/CImageIO.h"
-#include "CPluginProcessInterface.hpp"
+#include "Core/CPluginProcessInterface.hpp"
 #include "Main/CoreTools.hpp"
 
 //------------------------------//
